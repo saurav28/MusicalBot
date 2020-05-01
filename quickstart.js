@@ -115,7 +115,7 @@ function getChannel() {
   
   var service = google.youtube({
     version : 'v3',
-    auth : 'AIzaSyDT74RiKaJxxHAVyRjsSxcdXDTdhWkcS4w'});
+    auth : '<Your client id>'}); //TODO read from env variable
 
   
   service.search.list({
