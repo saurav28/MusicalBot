@@ -18,7 +18,7 @@ const getChannel = function getChannel(searchTerm) {
    
     var service = google.youtube({
       version : 'v3',
-      auth : 'AIzaSyDT74RiKaJxxHAVyRjsSxcdXDTdhWkcS4w'});
+      auth : '<Your API key>});
   
     
     service.search.list({
