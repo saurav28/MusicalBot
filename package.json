@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@google-cloud/storage": "^4.6.0",
+    "botbuilder-adapter-facebook": "^1.0.9",
     "botbuilder-adapter-web": "^1.0.6",
     "botbuilder-storage-mongodb": "^0.9.5",
     "botkit": "^4.6.2",
