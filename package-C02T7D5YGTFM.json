@@ -1,5 +1,5 @@
 {
-  "name": "botkit-samplebot",
+  "name": "botkit-facebookbot",
   "version": "1.0.0",
   "description": "",
   "main": "bot.js",
@@ -8,13 +8,13 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@google-cloud/storage": "^4.6.0",
-    "botbuilder-adapter-web": "^1.0.6",
+    "botbuilder-adapter-facebook": "^1.0.9",
     "botbuilder-storage-mongodb": "^0.9.5",
     "botkit": "^4.6.2",
     "botkit-plugin-cms": "^1.0.3",
     "dotenv": "^7.0.0",
     "google-auth-library": "^5.10.1",
-    "googleapis": "^48.0.0"
+    "googleapis": "^48.0.0",
+    "@google-cloud/storage": "^4.6.0"
   }
 }

@@ -1,19 +1,18 @@
-function loadClient() {
-  gapi.client.setApiKey("YOUR_API_KEY");
-  return gapi.client.load("https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest")
-      .then(function() { console.log("GAPI client loaded for API"); },
-            function(err) { console.error("Error loading GAPI client for API", err); });
+const {GoogleAuth} = require('google-auth-library');
+
+/**
+ * Instead of specifying the type of client you'd like to use (JWT, OAuth2, etc)
+ * this library will automatically choose the right client based on the environment.
+ */
+async function main() {
+  const auth = new GoogleAuth({
+    scopes: 'https://www.googleapis.com/auth/cloud-platform'
+  });
+  const client = await auth.getClient();
+  const projectId = await auth.getProjectId();
+  const url = `https://dns.googleapis.com/dns/v1/projects/${projectId}`;
+  const res = await client.request({ url });
+  console.log(res.data);
 }
-// Make sure the client is loaded before calling this method.
-function execute() {
-  return gapi.client.youtube.channels.list({
-    "part": "haha",
-    "forUsername": "saurav25"
-  })
-      .then(function(response) {
-              // Handle the results here (response.result has the parsed body).
-              console.log("Response", response);
-            },
-            function(err) { console.error("Execute error", err); });
-}
-gapi.load("client");
+
+main();

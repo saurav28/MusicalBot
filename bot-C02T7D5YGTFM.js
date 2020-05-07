@@ -18,8 +18,6 @@ const { FacebookAdapter, FacebookEventTypeMiddleware } = require('botbuilder-ada
 
 const { MongoDbStorage } = require('botbuilder-storage-mongodb');
 
-const YoutubeHelper  = require("./youtubeutil.js");
-
 // Load process.env values from .env file
 require('dotenv').config();
 
@@ -127,12 +125,11 @@ controller.hears('hi','message', async(bot, message) => {
 
 
 // const myDialog = new BotkitConversation(DIALOG_ID, controller);
-
-let myDialog = new BotkitConversation(DIALOG_ID,controller);
 try {
-myDialog.say('Hello');
+let myDialog = new BotkitConversation(DIALOG_ID,controller);
+//myDialog.say('Hello');
 
-myDialog.ask('Do you like Music?', [
+myDialog.ask('Do you hear Music?', [
     {
         pattern: 'yes',
         handler: async function(response, convo,bot) {
@@ -154,8 +151,8 @@ controller.addDialog(myDialog);
 }
 
 
-function askMusicPreferences(answer, convo, bot){
-    myDialog.ask('What would like to hear?', [
+function askMusicPreference(answer, convo, bot){
+    convo.ask('What would like to hear?', [
         {
             pattern: '.*',
             handler: async(response, convo, bot, message) => {
@@ -169,38 +166,14 @@ function askMusicPreferences(answer, convo, bot){
                    else {
                     for (i =0 ; i < channels.length ; i++) {
                     var videoLink = "Video link";
-                   // var videoURL = videoLink.link("https://www.youtube.com/watch?v="+channels[i].id.videoId);
-                     var videoURL = "https://www.youtube.com/watch?v="+channels[i].id.videoId;
-                    //facebook template formed as per https://developers.facebook.com/docs/messenger-platform/send-messages/template/generic
-                                 
-                    await bot.say({
-                        channelData:{ //need to send attachments with channeldata https://dev4slack.slack.com/archives/C0AV5N8NA/p1563790610005000
-                        attachment:{
-                            "type":"template",
-                            "payload":{
-                              "template_type":"generic",
-                              "elements":[
-                                 {
-                                  "title":"Youtube Video!",
-                                  "image_url":"https://petersfancybrownhats.com/company_image.png",
-                                  "subtitle":"Your choice of video",
-                                  "default_action": {
-                                    "type": "web_url",
-                                    "url": videoURL,
-                                    "webview_height_ratio": "tall",
-                                  },
-                                 
-                                }
-                              ]
-                            }
-                        }
-                    }
-                    });
+                    var videoURL = videoLink.link("https://www.youtube.com/watch?v="+channels[i].id.videoId);
+                     
+                    await bot.say(`This item is ${videoURL}. Its title is ${channels[i].snippet.title}`);
                     }
                   }
                 
                 }catch (error){
-                    console.log( 'error occurred ', error);
+                    console.log( 'error occurred ', err);
                 }
                
                  
@@ -211,7 +184,7 @@ function askMusicPreferences(answer, convo, bot){
     ],  {key: 'name'});
 }
 
-module.exports = myDialog;
+//module.exports = convo;
 // generic code for facebook support ends here
 
 //adding code for conversation support

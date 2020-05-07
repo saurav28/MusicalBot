@@ -9,7 +9,7 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceFolder}/quickstart.js",
+            "program": "${workspaceFolder}/bot.js",
             "outFiles": [
                 "${workspaceFolder}/**/*.js"
             ]

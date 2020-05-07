@@ -8,6 +8,8 @@ var {google} = require('googleapis');
 
 var {myDialog} = require("./bot")
 
+require('dotenv').config();
+
 const getChannelPromise = new Promise((resolve,reject) => {
 
 });
@@ -18,7 +20,7 @@ const getChannel = function getChannel(searchTerm) {
    
     var service = google.youtube({
       version : 'v3',
-      auth : 'AIzaSyDT74RiKaJxxHAVyRjsSxcdXDTdhWkcS4w'});
+      auth : process.env.YOUTUBE_SECRET_KEY});
   
     
     service.search.list({

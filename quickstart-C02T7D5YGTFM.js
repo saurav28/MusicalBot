@@ -3,6 +3,7 @@ var readline = require('readline');
 var {google} = require('googleapis');
 var OAuth2 = google.auth.OAuth2;
 var http = require('http');
+var result ;
 
 http.createServer(function (req, res) {
   res.writeHead(200, {'Content-Type': 'text/html'});
@@ -114,7 +115,7 @@ function getChannel() {
   
   var service = google.youtube({
     version : 'v3',
-    auth : 'Your API secret key'});
+    auth : 'AIzaSyBA2ONppqJvWkhOa916SiHIjQO40but97o'}); //with new API key
 
   
   service.search.list({
@@ -129,10 +130,17 @@ function getChannel() {
     if (channels.length == 0) {
       console.log('No items found.');
     } else {
+      console.log('channels length ' + channels.length);
+      for (i =0; i < channels.length ; i++){
       console.log('This items\'s ID is %s. Its title is \'%s\', and ' ,
-                  channels[0].id,
-                  channels[0].snippet.title
+                  channels[i].id,
+                  channels[i].snippet.title
                   );
+      }
     }
+    
+    
   });
+
+  
 }
