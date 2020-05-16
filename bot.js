@@ -96,29 +96,9 @@ controller.hears('hi','message', async(bot, message) => {
 
     
     console.log('I heard a message');
-   
-    //await bot.reply(message, 'Howdy Human');
 
-  
-
-//   await bot.reply(message, {
-//     text: 'Choose a button', 
-//     quick_replies: [
-//         {
-//             "content_type":"text",
-//             "title":"Foo",
-//             "payload":"true"
-//         },
-//         {
-//             "content_type":"text",
-//             "title":"Bar",
-//             "payload":"false"
-//         }
-//     ]
-// });
- 
      
-       await bot.beginDialog(DIALOG_ID);
+    await bot.beginDialog(DIALOG_ID);
 
     
     
@@ -136,6 +116,7 @@ myDialog.ask('Do you like Music?', [
     {
         pattern: 'yes',
         handler: async function(response, convo,bot) {
+            console.log("you like music");
             await askMusicPreferences(response,convo,bot);
         }
     },
@@ -161,13 +142,15 @@ function askMusicPreferences(answer, convo, bot){
             handler: async(response, convo, bot, message) => {
                 try {
                 var channels = await YoutubeHelper.getChannel(response);
-                
-                if (channels.length == 0) {
+                var noOfChannels = channels.length;
+                console.log('No of videos:: ' + noOfChannels);
+                if (noOfChannels == 0) {
                     
                    await bot.say('No items found.');
                 }
                    else {
-                    for (i =0 ; i < channels.length ; i++) {
+                     
+                    for (i =0 ; i < noOfChannels ; i++) {
                     var videoLink = "Video link";
                    // var videoURL = videoLink.link("https://www.youtube.com/watch?v="+channels[i].id.videoId);
                      var videoURL = "https://www.youtube.com/watch?v="+channels[i].id.videoId;
