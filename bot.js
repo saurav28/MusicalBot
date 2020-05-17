@@ -134,8 +134,6 @@ controller.addDialog(myDialog);
     console.log('error occurred' , err);
 }
 
-myDialog.addMessage('End_of_conversation', 'Hope you like our recommendations');
-
 function askMusicPreferences(answer, convo, bot){
     console.log (' Inside asking for music preferences');
     myDialog.ask('What would like to hear?', [
@@ -183,7 +181,7 @@ function askMusicPreferences(answer, convo, bot){
                     });
                     }
                   }
-                  convo.gotoThread('End_of_conversation');
+                 
                 
                 }catch (error){
                     console.log( 'error occurred ', error);
