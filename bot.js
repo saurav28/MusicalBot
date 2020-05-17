@@ -136,6 +136,7 @@ controller.addDialog(myDialog);
 
 
 function askMusicPreferences(answer, convo, bot){
+    console.log (' Inside asking for music preferences');
     myDialog.ask('What would like to hear?', [
         {
             pattern: '.*',
