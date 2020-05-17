@@ -135,7 +135,7 @@ controller.addDialog(myDialog);
 }
 
 myDialog.addMessage({
-    text: 'Hope you like our recommendations',
+    text: 'Hope you liked our recommendations',
     action: 'complete'
 },'End_of_conversation');
 
