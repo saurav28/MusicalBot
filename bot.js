@@ -20,6 +20,8 @@ const { MongoDbStorage } = require('botbuilder-storage-mongodb');
 
 const YoutubeHelper  = require("./youtubeutil.js");
 
+var processed =true;
+
 // Load process.env values from .env file
 require('dotenv').config();
 
@@ -92,15 +94,30 @@ controller.webserver.get('/', (req, res) => {
 });
 
 
-controller.hears('hi','message', async(bot, message) => {
+controller.hears('.*','message', async(bot, message) => {
 
+    //var oldText = message.incoming_message.text;
     
-    console.log('I heard a message');
-
-     
+    // if(!processed){
+    //     return;
+    // }
+    processed = false;
+    var nlpEntities = message.incoming_message.channelData.nlp.entities;
+        
+    if(checkSentimentValue(nlpEntities)|| message.incoming_message.text == '#music'){
     await bot.beginDialog(DIALOG_ID);
-
-    
+    }else if(nlpEntities.bye != null &&  nlpEntities.bye[0].confidence >0.8){
+        processed = true;
+        await bot.reply (message,'Do you want to leave ? i can suggest some nice music for you. Just enter \'#music\'');
+    } else if(nlpEntities.thanks != null && nlpEntities.thanks[0].confidence >0.8){
+        processed = true;
+        await bot.reply (message,'Hope you liked our recommendations. If you want to keep hearing music just say \'#music\'');
+    } 
+    else {
+        processed = true;
+        await bot.reply (message,'You Don\'t seem to be in nice mood. Why Don\'t you hear some music by entering \'#music\'');
+    }
+ 
     
 });
 
@@ -112,7 +129,7 @@ let myDialog = new BotkitConversation(DIALOG_ID,controller);
 try {
 myDialog.say('Hello');
 
-myDialog.ask('Do you like Music?', [
+myDialog.ask('Do you want to hear some music?', [
     {
         pattern: 'yes',
         handler: async function(response, convo,bot) {
@@ -134,14 +151,13 @@ controller.addDialog(myDialog);
     console.log('error occurred' , err);
 }
 
-myDialog.addMessage({
-    text: 'Hope you liked our recommendations',
-    action: 'complete'
-},'End_of_conversation');
+myDialog.addMessage('Hope you liked our recommendations . If you would like keep hearing music then enter \'#music\'',
+//     action: 'complete'
+'End_of_conversation');
 
 function askMusicPreferences(answer, convo, bot){
     console.log (' Inside asking for music preferences');
-    myDialog.ask('What would like to hear?', [
+    myDialog.ask('What would you like to hear?', [
         {
             pattern: '.*',
             handler: async(response, convo, bot, message) => {
@@ -160,7 +176,7 @@ function askMusicPreferences(answer, convo, bot){
                    // var videoURL = videoLink.link("https://www.youtube.com/watch?v="+channels[i].id.videoId);
                      var videoURL = "https://www.youtube.com/watch?v="+channels[i].id.videoId;
                     //facebook template formed as per https://developers.facebook.com/docs/messenger-platform/send-messages/template/generic
-                                 
+                            
                     await bot.say({
                         channelData:{ //need to send attachments with channeldata https://dev4slack.slack.com/archives/C0AV5N8NA/p1563790610005000
                         attachment:{
@@ -186,6 +202,7 @@ function askMusicPreferences(answer, convo, bot){
                     });
                     }
                   }
+                  processed = true;
                   convo.gotoThread('End_of_conversation');
                 
                 }catch (error){
@@ -198,6 +215,21 @@ function askMusicPreferences(answer, convo, bot){
         }
     }
     ],  {key: 'name'});
+}
+
+function checkSentimentValue(nlpEntities){
+    var result = false;
+    
+    if(nlpEntities.greetings != null && nlpEntities.sentiment != null) {
+    var greetingsConfidence = nlpEntities.greetings[0].confidence;
+    var sentimentValue = nlpEntities.sentiment[0].value;
+    console.log('greetings confidence', greetingsConfidence);
+    console.log('sentiment value', sentimentValue);
+   if (greetingsConfidence > 0.8 && sentimentValue == 'positive'){
+       result = true;
+   }
+}
+   return result;
 }
 
 module.exports = myDialog;
