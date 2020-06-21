@@ -216,7 +216,13 @@ function askMusicPreferences(answer, convo, bot){
     }
     ],  {key: 'name'});
 }
+//Interrupt to quit
+controller.interrupts('quit', 'message', async(bot, message) => {
+    await bot.reply(message, 'Quitting!');
 
+    // cancel any active dialogs
+    await bot.cancelAllDialogs();
+});
 function checkSentimentValue(nlpEntities){
     var result = false;
     
