@@ -112,10 +112,12 @@ controller.hears('.*','message', async(bot, message) => {
     } else if(nlpEntities.thanks != null && nlpEntities.thanks[0].confidence >0.8){
         processed = true;
         await bot.reply (message,'Hope you liked our recommendations. If you want to keep hearing music just say \'#music\'');
-    } 
+    } else if (isSentimentNegative(nlpEntities)){
+        await bot.reply (message,'You Don\'t seem to be in nice mood. Why Don\'t you cheer yourself up by listening to some music by entering \'#music\'');
+    }
     else {
         processed = true;
-        await bot.reply (message,'You Don\'t seem to be in nice mood. Why Don\'t you hear some music by entering \'#music\'');
+        await bot.reply (message,'Welcome to your Musical assistant. Just start grooving by entering \'#music\'');
     }
  
     
@@ -127,7 +129,7 @@ controller.hears('.*','message', async(bot, message) => {
 
 let myDialog = new BotkitConversation(DIALOG_ID,controller);
 try {
-myDialog.say('Hello');
+myDialog.say('Hello. Lets start grooving');
 
 myDialog.ask('Do you want to hear some music?', [
     {
@@ -232,6 +234,21 @@ function checkSentimentValue(nlpEntities){
     console.log('greetings confidence', greetingsConfidence);
     console.log('sentiment value', sentimentValue);
    if (greetingsConfidence > 0.8 && sentimentValue == 'positive'){
+       result = true;
+   }
+}
+   return result;
+}
+
+function isSentimentNegative(nlpEntities){
+    var result = false;
+    
+    if(nlpEntities.sentiment != null) {
+   
+    var sentimentValue = nlpEntities.sentiment[0].value;
+    
+    console.log('sentiment value', sentimentValue);
+   if (sentimentValue == 'negative'){
        result = true;
    }
 }
